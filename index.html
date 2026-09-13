@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PVRS BOOK SHOP - Your Ultimate Book Store{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section position-relative" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 500px;">
+    <div class="container h-100 d-flex align-items-center">
+        <div class="row w-100">
+            <div class="col-lg-6 text-white">
+                <h1 class="display-2 fw-bold" style="font-family: 'Playfair Display', serif;">
+                    Welcome to <br><span class="text-warning">PVRS BOOK SHOP</span>
+                </h1>
+                <p class="lead">Discover thousands of books from storybooks to research papers. Find your next great read today!</p>
+                <div class="mt-4">
+                    <a href="{% url 'book_list' %}" class="btn btn-warning btn-lg me-3">
+                        <i class="fas fa-shopping-bag"></i> Shop Now
+                    </a>
+                    <a href="{% url 'book_list' %}?type=story" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-scroll"></i> Story Books
+                    </a>
+                </div>
+                <div class="mt-4">
+                    <span class="badge bg-primary me-2">1000+ Books</span>
+                    <span class="badge bg-success me-2">20+ Categories</span>
+                    <span class="badge bg-info">AI Powered</span>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop" alt="Books" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Categories Quick Access -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-2 col-6 mb-3">
+                <a href="{% url 'book_list' %}?type=story" class="text-decoration-none">
+                    <div class="category-card p-3 bg-white rounded shadow-sm">
+                        <i class="fas fa-scroll fa-2x text-primary"></i>
+                        <p class="mb-0 mt-2">Story Books</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <a href="{% url 'book_list' %}?type=research" class="text-decoration-none">
+                    <div class="category-card p-3 bg-white rounded shadow-sm">
+                        <i class="fas fa-flask fa-2x text-success"></i>
+                        <p class="mb-0 mt-2">Research</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <a href="{% url 'book_list' %}?category=fiction" class="text-decoration-none">
+                    <div class="category-card p-3 bg-white rounded shadow-sm">
+                        <i class="fas fa-pen-fancy fa-2x text-info"></i>
+                        <p class="mb-0 mt-2">Fiction</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <a href="{% url 'book_list' %}?category=science" class="text-decoration-none">
+                    <div class="category-card p-3 bg-white rounded shadow-sm">
+                        <i class="fas fa-atom fa-2x text-warning"></i>
+                        <p class="mb-0 mt-2">Science</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <a href="{% url 'book_list' %}?category=history" class="text-decoration-none">
+                    <div class="category-card p-3 bg-white rounded shadow-sm">
+                        <i class="fas fa-landmark fa-2x text-danger"></i>
+                        <p class="mb-0 mt-2">History</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2 col-6 mb-3">
+                <a href="{% url 'book_list' %}?category=tech" class="text-decoration-none">
+                    <div class="category-card p-3 bg-white rounded shadow-sm">
+                        <i class="fas fa-microchip fa-2x text-secondary"></i>
+                        <p class="mb-0 mt-2">Technology</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Sections -->
+<section class="py-5">
+    <div class="container">
+        <!-- Bestsellers -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title">
+                <i class="fas fa-crown text-warning"></i> Best Sellers
+            </h2>
+            <a href="{% url 'book_list' %}?sort=popular" class="btn btn-outline-primary">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            {% for book in bestsellers %}
+                <div class="col-lg-3 col-md-4 col-6 mb-4">
+                    <div class="book-card">
+                        <div class="position-relative">
+                            <img src="{{ book.get_cover_url }}" alt="{{ book.title }}" class="img-fluid w-100 book-cover" style="height: 280px; object-fit: cover; border-radius: 8px;"
+                                 onerror="this.src='https://picsum.photos/seed/{{ book.id }}/400/600'">
+                            <span class="badge bg-warning position-absolute top-0 end-0 m-2">Bestseller</span>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="book-title">{{ book.title|truncatechars:30 }}</h6>
+                            <p class="book-author text-muted small">{{ book.author }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">₹{{ book.price }}</span>
+                                <div>
+                                    <span class="text-warning">★</span>
+                                    <small>{{ book.rating }}</small>
+                                </div>
+                            </div>
+                            <a href="{% url 'book_detail' book.id %}" class="btn btn-sm btn-primary w-100 mt-2">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">No bestsellers available.</p>
+            {% endfor %}
+        </div>
+
+        <!-- New Arrivals -->
+        <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+            <h2 class="section-title">
+                <i class="fas fa-star text-primary"></i> New Arrivals
+            </h2>
+            <a href="{% url 'book_list' %}?sort=created_at" class="btn btn-outline-primary">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            {% for book in new_arrivals %}
+                <div class="col-lg-3 col-md-4 col-6 mb-4">
+                    <div class="book-card">
+                        <div class="position-relative">
+                            <img src="{{ book.get_cover_url }}" alt="{{ book.title }}" class="img-fluid w-100 book-cover" style="height: 280px; object-fit: cover; border-radius: 8px;"
+                                 onerror="this.src='https://picsum.photos/seed/{{ book.id }}/400/600'">
+                            <span class="badge bg-success position-absolute top-0 end-0 m-2">New</span>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="book-title">{{ book.title|truncatechars:30 }}</h6>
+                            <p class="book-author text-muted small">{{ book.author }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">₹{{ book.price }}</span>
+                                <div>
+                                    <span class="text-warning">★</span>
+                                    <small>{{ book.rating }}</small>
+                                </div>
+                            </div>
+                            <a href="{% url 'book_detail' book.id %}" class="btn btn-sm btn-success w-100 mt-2">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">No new arrivals yet.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Story Books -->
+        <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+            <h2 class="section-title">
+                <i class="fas fa-scroll text-danger"></i> Story Books
+            </h2>
+            <a href="{% url 'book_list' %}?type=story" class="btn btn-outline-danger">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            {% for book in story_books %}
+                <div class="col-lg-2 col-md-3 col-4 mb-3">
+                    <div class="book-card-small">
+                        <img src="{{ book.get_cover_url }}" alt="{{ book.title }}" class="img-fluid w-100" style="height: 180px; object-fit: cover; border-radius: 6px;"
+                             onerror="this.src='https://picsum.photos/seed/{{ book.id }}/400/600'">
+                        <h6 class="small mt-1 text-truncate">{{ book.title }}</h6>
+                        <a href="{% url 'book_detail' book.id %}" class="btn btn-sm btn-outline-primary w-100">View</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">No story books available.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Research Books -->
+        <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+            <h2 class="section-title">
+                <i class="fas fa-flask text-info"></i> Research Books
+            </h2>
+            <a href="{% url 'book_list' %}?type=research" class="btn btn-outline-info">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="row">
+            {% for book in research_books %}
+                <div class="col-lg-2 col-md-3 col-4 mb-3">
+                    <div class="book-card-small">
+                        <img src="{{ book.get_cover_url }}" alt="{{ book.title }}" class="img-fluid w-100" style="height: 180px; object-fit: cover; border-radius: 6px;"
+                             onerror="this.src='https://picsum.photos/seed/{{ book.id }}/400/600'">
+                        <h6 class="small mt-1 text-truncate">{{ book.title }}</h6>
+                        <a href="{% url 'book_detail' book.id %}" class="btn btn-sm btn-outline-info w-100">View</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">No research books available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container text-center text-white">
+        <h2 class="display-4">Find Your Next Adventure</h2>
+        <p class="lead">Explore thousands of books across all genres. Start your journey today!</p>
+        <a href="{% url 'book_list' %}" class="btn btn-light btn-lg mt-3">
+            <i class="fas fa-book-open"></i> Browse All Books
+        </a>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h3><i class="fas fa-envelope text-primary"></i> Subscribe to Our Newsletter</h3>
+                <p>Get updates on new arrivals, bestsellers, and exclusive offers!</p>
+                <form method="post" action="{% url 'subscribe' %}" class="d-flex justify-content-center">
+                    {% csrf_token %}
+                    <input type="email" name="email" class="form-control w-50 me-2" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
